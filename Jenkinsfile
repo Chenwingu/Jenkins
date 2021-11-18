@@ -20,7 +20,7 @@ pipeline {
         
         script{
           
-          if { expression { params.RELEASE} } {
+          if (params.RELEASE) {
             
         echo "Release code to next environment"
       }
