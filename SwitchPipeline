@@ -1,0 +1,58 @@
+pipeline {
+    
+    agent any
+    
+    parameters {
+        booleanParam(name: "RELEASE", defaultValue: false)
+        choice(name: "DEPLOY_TO", choices: ["", "INT", "PRE", "PROD"])
+    }
+    
+    stages {
+
+        stage("Build") {
+            steps {
+                echo "build code"
+            }
+        }
+        
+        stage("Publish") {
+            parallel {
+                stage('Pre-Release') {
+                    when { expression { !params.RELEASE } }
+                    steps {
+                        echo "pre-release"
+                    }
+                }
+                stage("Release") {
+                    when { expression { params.RELEASE } }
+                    steps {
+                        echo "Release"
+                    }
+                }
+            }
+        }
+
+        stage("Deploy") {
+            parallel {
+                stage("INT") {
+                    when { expression { params.DEPLOY_TO == "INT" } }
+                    steps {
+                        echo "Integration"
+                    }
+                }
+                stage("PRE") {
+                    when { expression { params.DEPLOY_TO == "PRE" } }
+                    steps {
+                        echo "pre-prod"
+                    }
+                }
+                stage("PROD") {
+                    when { expression { params.DEPLOY_TO == "PROD" } }
+                    steps {
+                        echo "production"
+                    }
+                }
+            }
+        }
+    }
+}
