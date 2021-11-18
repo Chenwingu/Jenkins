@@ -15,9 +15,18 @@ pipeline {
     }
     
     stage("Publish") {
-      when { expression { params.RELEASE} }
+      
       steps{
+        
+        script{
+          
+          if { expression { params.RELEASE} } {
+            
         echo "Release code to next environment"
+      }
+      else
+      {
+        echo " Pre release activites conducted"
       }
     }
   }
