@@ -1,0 +1,34 @@
+pipeline {
+    
+    agent any
+    
+    parameters {
+        booleanParam(name: "RELEASE", defaultValue: false)
+    }
+    
+    stages {
+
+        stage("Build") {
+            steps {
+                echo "Build code"
+            }
+        }
+        
+        stage("Publish") {
+            parallel {
+                stage("Release") {
+                    when { expression { params.RELEASE } }
+                    steps {
+                        echo "deploying"
+                    }
+                }
+                stage('Pre-Release') {
+                    when { expression { !params.RELEASE } }
+                    steps {
+                        echo "pre-release"
+                    }
+                }
+            }
+        }
+    }
+}
