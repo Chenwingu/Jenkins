@@ -1,0 +1,27 @@
+pipeline{
+agent any
+stages{
+ stage('One')
+ {
+ steps{
+ echo "Hello"
+ }
+ }
+ stage('evaluate branch')
+ {
+ when{
+ branch "master"
+ }
+ steps{
+ echo "world"
+ echo "sonal"
+ }
+ }
+ }
+ }
+ 
+ 
+ 
+ 
+ 
+ 
