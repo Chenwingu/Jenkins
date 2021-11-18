@@ -1,33 +1,29 @@
 pipeline {
-  agent any
-  
-  parameters {
-    booleanParam(name: "RELEASE", defaultValue: false)
     
-  }
-  
-  stages {
-    stage("build")
-    {
-      steps {
-        echo "build the code"
-      }
+    agent any
+    
+    parameters {
+        booleanParam(name: "RELEASE", defaultValue: false)
     }
     
-    stage("Publish") {
-      
-      steps{
+    stages {
+
+        stage("Build") {
+            steps {
+                echo "build code"
+            }
+        }
         
-        script{
-          
-          if (params.RELEASE) {
-            
-        echo "Release code to next environment"
-      }
-      else
-      {
-        echo " Pre release activites conducted"
-      }
+        stage("Publish") {
+            steps {
+                script {
+                    if (params.RELEASE) {
+                        echo "release"
+                    } else {
+                        echo "pre-release activites"
+                    }
+                }
+            }
+        }
     }
-  }
 }
